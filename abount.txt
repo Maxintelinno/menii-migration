@@ -1,0 +1,68 @@
+###########################
+### ความสัมพันธ์หลักของข้อมูล ###
+###########################
+
+User กับ Profile
+    - 1 user อาจมีหลาย roles
+    - 1 user มีได้ 1 client_profile
+    - 1 user มีได้ 1 lawyer_profile
+    - 1 user ที่เป็น staff อาจมี admin_profile
+
+Lawyer กับ Verification
+    - 1 lawyer_profile มี verification ได้หลายรอบ
+    - ใช้เก็บ history การตรวจเอกสารทุกครั้ง
+
+Appointment กับ Payment
+    - 1 appointment มี 1 payment หลักใน MVP
+    - ต่อไปขยายเป็นหลาย payment ได้ เช่น มัดจำ / ค่าบริการเพิ่ม
+
+Payment กับ Revenue Ledger
+    - ทุก payment ต้องแตก ledger เป็นรายการย่อย
+    - เพื่อรองรับ fee / refund / payout        
+
+
+###########################
+### Business Rules สำคัญ ###
+###########################
+
+7.1 Lawyer verification
+    - ทนายห้ามแสดงผลต่อสาธารณะจนกว่าสถานะ = APPROVED
+    - ถ้าเลย reverify_due_at ให้สถานะเป็น REVIEW_REQUIRED
+    - ถ้าเอกสารไม่ครบ -> NEED_MORE_INFO
+    - ถ้าพบปัญหาร้ายแรง -> SUSPENDED
+    - จากแหล่งของสภาทนายความ มีทั้งแบบฟอร์มตรวจสอบประวัติทนายความ (ท.8), หนังสือรับรองการเป็นทนายความ, ช่องทางติดต่อสำนักงานทะเบียน และข้อมูลเกี่ยวกับการรับใบอนุญาต/บัตรสมาชิก จึงเหมาะจะใช้เป็นฐานอ้างอิงสำหรับ workflow ตรวจสอบทนายในแพลตฟอร์ม
+
+7.2 Appointment lifecycle
+    - Client สร้างนัด
+    - ระบบคำนวณราคา
+    - Client ชำระเงิน
+    - Lawyer รับหรือปฏิเสธ
+    - ถ้ารับ -> CONFIRMED
+    - ถ้าปฏิเสธ -> refund เต็มจำนวน
+    - หลังจบงาน -> COMPLETED
+    - ระบบ mark เข้ารอบ payout
+7.3 Revenue split
+ตัวอย่าง:
+    - ลูกค้าจ่าย 1,000
+    - platform fee 20% = 200
+    - gateway fee 30
+    - net lawyer = 770
+
+ledger ที่ต้องเกิด:
+    - GROSS +1000
+    - PLATFORM_FEE -200
+    - GATEWAY_FEE -30
+    - LAWYER_NET -770
+7.4 Review rules
+    - รีวิวได้เฉพาะ appointment ที่ COMPLETED
+    - 1 appointment = 1 review
+    - admin สามารถ hide review ได้
+7.5 Search ranking
+    - อันดับค้นหาควรดูจาก:
+    - verified status
+    - ความใกล้
+    - practice area match
+    - rating
+    - response rate
+    - availability
+    - ราคา

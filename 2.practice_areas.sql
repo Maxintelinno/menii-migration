@@ -1,0 +1,12 @@
+CREATE TABLE practice_areas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code VARCHAR(50) NOT NULL UNIQUE,
+    name_th VARCHAR(150) NOT NULL,
+    name_en VARCHAR(150),
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- หมวดกฎหมาย
+-- ตัวอย่าง: CIVIL, CRIMINAL, FAMILY, LABOR, PROPERTY, DEBT, BUSINESS, CONSUMER

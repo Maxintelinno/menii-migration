@@ -1,0 +1,59 @@
+users
+ ├─< user_roles >─ roles
+ ├─< client_profiles
+ ├─< lawyer_profiles
+ ├─< admin_profiles
+ ├─< user_addresses
+ ├─< identity_verifications
+ └─< documents
+
+lawyer_profiles
+ ├─< lawyer_practice_areas >─ practice_areas
+ ├─< lawyer_service_areas >─ provinces/districts
+ ├─< lawyer_verifications
+ ├─< lawyer_licenses
+ ├─< lawyer_availabilities
+ ├─< lawyer_bank_accounts
+ ├─< reviews
+ ├─< appointments
+ ├─< chats
+ ├─< payouts
+ └─< statements
+
+client_profiles
+ ├─< appointments
+ ├─< chats
+ ├─< reviews
+ ├─< intake_forms
+ └─< documents
+
+appointments
+ ├─ belongs_to client
+ ├─ belongs_to lawyer
+ ├─< appointment_status_logs
+ ├─< payments
+ ├─< chat_rooms
+ ├─< intake_forms
+ └─< disputes
+
+chat_rooms
+ ├─< chat_participants
+ ├─< chat_messages
+ └─< attachments
+
+payments
+ ├─< payment_transactions
+ ├─< refunds
+ ├─< revenue_ledgers
+ └─< payouts
+
+revenue_ledgers
+ ├─ belongs_to payment
+ ├─ belongs_to lawyer
+ ├─ optional payout_id
+ └─ entries: gross / fee / gateway_fee / net / refund / adjustment
+
+admin_actions
+ ├─< audit_logs
+ ├─< moderation_cases
+ └─< verification_reviews
